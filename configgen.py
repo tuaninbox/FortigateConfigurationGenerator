@@ -30,16 +30,16 @@ def firewallpolicygen(listofentries):
     print(f"config firewall policy")
     for e in listofentries:
         print(f"edit {e['Rule Number']}")
-        print(f"  set name {e['Name']}") #VPN to 8497 St Thomas More"
-        print(f"  set srcintf {e['Source Interface']}") #ssl.INTERNET"
-        print(f"  set dstintf {e['Destination Interface']}") #vdroot-INT0"
-        print(f"  set srcaddr {e['Source Address']}") #CEWAPE2VPN-10.65.0.0/16"
-        print(f"  set dstaddr {e['Destination Address']}") #School-8497-LAN"
-        print(f"  set action {e['Action']}") #accept
-        print(f"  set schedule {e['Schedule']}") #always"
-        print(f"  set service {e['Service']}") #"DNS" "HTTP" "HTTPS" "PING" "RDP" "SSH" "TELNET" "TRACEROUTE"
-        print(f"  set logtraffic {e['Log Traffic']}") #all
-        print(f"  set groups {e['Group']}") #PE2VPNGroup-User-8497"
+        print(f"  set name {e['Name']}")
+        print(f"  set srcintf {e['Source Interface']}")
+        print(f"  set dstintf {e['Destination Interface']}")
+        print(f"  set srcaddr {e['Source Address']}")
+        print(f"  set dstaddr {e['Destination Address']}")
+        print(f"  set action {e['Action']}")
+        print(f"  set schedule {e['Schedule']}")
+        print(f"  set service {e['Service']}")
+        print(f"  set logtraffic {e['Log Traffic']}")
+        print(f"  set groups {e['Group']}")
         print(f"next")
     print(f"end")
 
