@@ -16,7 +16,7 @@ edit "Group Name"
       set server-name Server1
       set group-name "CN=Group Name,OU=Groups,OU=Staff,DC=domain,DC=com"
     next
-    edit 1
+    edit 2
       set server-name Server2
       set group-name "CN=Group Name,OU=Groups,OU=Staff,DC=domain,DC=com"
     next
