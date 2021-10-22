@@ -1,4 +1,4 @@
-import csv,argparse
+import csv,argparse,sys
 
 def readdata(filename):
     r=[]
@@ -8,7 +8,11 @@ def readdata(filename):
             r.append(e)
     return r
 
-def usergroupgen(listofentries):
+
+# Firewall User Group
+# FortiManager OS v6.4: Policy & Objects -> Object Configurations -> User & Authentication -> User Groups
+# Fortigate OS v6.4: User & Authentication -> User Groups
+def UserGroupGen(listofentries):
     print(f"config user group")
     for e in listofentries:
         print(f"edit \"{e['Group Name']}\"")
@@ -25,8 +29,40 @@ def usergroupgen(listofentries):
         print(f"  end")
         print(f"next")
     print(f"end")
-    
-def firewallpolicygen(listofentries):
+
+
+# Firewall Address Group
+# FortiManager OS v6.4: Policy & Objects -> Object Configurations -> Firewall Objects -> Addresses
+# Fortigate OS v6.4: Policy & Objects -> Addresses
+def AddAddressToGroup(listofentries,groupname):
+    print(f"config firewall addrgrp")
+    print(f"  edit \"{groupname}\"")
+    print(f"    set member",end='')
+    for e in listofentries:
+        if e['IP']:
+            print(f" \"{e['Name']}\"",end='')
+    print(f"")    
+    print(f"  next")
+    print(f"end")
+
+
+# Firewall Address
+# FortiManager OS v6.4: Policy & Objects -> Object Configurations -> Firewall Objects -> Addresses
+# Fortigate OS v6.4: Policy & Objects -> Addresses
+def FirewallAddressGen(listofentries):
+    print(f"config firewall address")
+    for e in listofentries:
+        if e['IP']:
+            print(f"  edit \"{e['Name']}\"")
+            print(f"    set subnet {e['IP']} {e['SubnetMask']}")
+            print(f"  next")
+    print(f"end")
+
+
+# Firewall Policy
+# FortiManager OS v6.4: Policy & Objects -> Policy Packages -> Firewall Policy
+# Fortigate OS v6.4: Policy & Objects -> Firewall Policy
+def FirewallPolicyGen(listofentries):
     print(f"config firewall policy")
     for e in listofentries:
         print(f"edit {e['Rule Number']}")
@@ -43,6 +79,8 @@ def firewallpolicygen(listofentries):
         print(f"next")
     print(f"end")
 
+
+#
 def main():
     parser=argparse.ArgumentParser(description='Fortigate Configuration Generator')
     parser.add_argument('-d','--data',type=str,metavar='',required=True,help='Data file, csv format')
@@ -54,12 +92,23 @@ def main():
 
     if args.data and args.type == "group":
         data = readdata(args.data)
-        usergroupgen(data)
+        UserGroupGen(data)
     elif args.data and args.type== "policy":
         data = readdata(args.data)
-        firewallpolicygen(data)
+        FirewallPolicyGen(data)
+    elif args.data and args.type=="address":
+        data = readdata(args.data)
+        FirewallAddressGen(data)
+    elif args.data and args.type=="addresstogroup":
+        groupname="SchoolFortigates"
+        if groupname=="":
+            print(f"Missing Group Name")
+            sys.exit(1)
+        data = readdata(args.data)
+        AddAddressToGroup(data,groupname)
     else:
         print(f"Wrong syntax")
+
 
 if __name__ == "__main__":
     main()
